@@ -8,4 +8,6 @@ categories:
 - WordPress
 ---
 
-Hello from Python!
+Hello from Github!
+
+See <https://github.com/mashirozx/WordPressXMLRPCTools>
