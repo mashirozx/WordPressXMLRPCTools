@@ -39,6 +39,9 @@ try:
 except:
     print("无法获取github的secrets配置信息,开始使用本地变量")
 
+# username = ''
+# password = ''
+# xmlrpc_php = 'https://wp.moezx.cc/xmlrpc.php'
 
 url_info = urlparse(xmlrpc_php)
 
@@ -206,7 +209,8 @@ def insert_index_info_in_readme():
     for md in md_list:
         (content, metadata) = read_md(md)
         title = metadata.get("title", "")
-        insert_info = insert_info + "[" + title +"](" + "https://"+domain_name + "/p/" + os.path.basename(md).split(".")[0] +"/" + ")\n\n"
+        filename = os.path.basename(md).split(".")[0]
+        insert_info = insert_info + "[" + title +"](" + "https://" + domain_name + "/" + filename.split("-")[0] + "/" + filename.split("-")[1] + "/" + filename.split("-")[2] + "/" + filename.split("-", 3)[-1] +"/" + ")\n\n"
     # 替换 ---start--- 到 ---end--- 之间的内容
 
     insert_info = "---start---\n## 目录(" + time.strftime('%Y年%m月%d日') + "更新)" +"\n" + insert_info + "---end---"
@@ -258,15 +262,17 @@ def main():
             terms_names_post_tag = metadata.get("tags",  domain_name)
             terms_names_category = metadata.get("categories", domain_name)
             post_status = "publish"
-            link = sha1_key.split(".")[0]
-            content = markdown.markdown(content + href_info("https://"+domain_name+"/p/"+link+"/"), extensions=['tables', 'fenced_code'])
+            filename = sha1_key.split(".")[0]
+            link = filename.split("-", 3)[-1]
+            content = markdown.markdown(content + href_info("https://" + domain_name + "/" + filename.split("-")[0] + "/" + filename.split("-")[1] + "/" + filename.split("-")[2] + "/" + filename.split("-", 3)[-1] +"/"), extensions=['tables', 'fenced_code'])
             # 如果文章无id,则直接新建
-            if(("https://"+domain_name+"/p/"+link+"/" in link_id_dic.keys()) == False):
+            if(("https://" + domain_name + "/" + filename.split("-")[0] + "/" + filename.split("-")[1] + "/" + filename.split("-")[2] + "/" + filename.split("-", 3)[-1] +"/" in link_id_dic.keys()) == False):
                 new_post(title, content, link, post_status, terms_names_post_tag, terms_names_category)
             # 如果文章有id, 则更新文章
             else:
                 # 获取id
-                id = link_id_dic["https://"+domain_name+"/p/"+link+"/"]
+                id = link_id_dic["https://" + domain_name + "/" + filename.split("-")[0] + "/" + filename.split("-")[1] + "/" + filename.split("-")[2] + "/" + filename.split("-", 3)[-1] +"/"]
+                link
                 edit_post(id, title, content, link, post_status, terms_names_post_tag, terms_names_category)
     # 4. 重建md_sha1_dic
     rebuild_md_sha1_dic(os.path.join(os.getcwd(), ".md_sha1"), os.path.join(os.getcwd(), "_posts"))

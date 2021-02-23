@@ -8,4 +8,4 @@ categories:
 - WordPress
 ---
 
-Hello
+Hello from Python!
